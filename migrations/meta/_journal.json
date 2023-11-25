@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1700936997740,
+      "tag": "0000_supreme_rumiko_fujikawa",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1700938780378,
+      "tag": "0001_previous_prowler",
+      "breakpoints": true
+    }
+  ]
+}
