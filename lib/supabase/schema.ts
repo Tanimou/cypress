@@ -70,8 +70,6 @@ export const folders = pgTable('folders', {
     // Define the 'inTrash' column as text, not null constraint
     inTrash: text('in_trash').notNull(),
 
-    // Define the 'logo' column as text, not null constraint
-    logo: text('logo').notNull(),
 
     // Define the 'bannerUrl' column as text, not null constraint
     bannerUrl: text('banner_url').notNull(),
@@ -109,53 +107,25 @@ export const files = pgTable('files', {
     // Define the 'inTrash' column as text, not null constraint
     inTrash: text('in_trash').notNull(),
 
-    // Define the 'logo' column as text, not null constraint
-    logo: text('logo').notNull(),
 
     // Define the 'bannerUrl' column as text, not null constraint
     bannerUrl: text('banner_url').notNull(),
 })
 
 export const subscriptions = pgTable("subscriptions", {
-    // Define the 'id' column as text, primary key, and not null constraint
     id: text("id").primaryKey().notNull(),
-
-    // Define the 'userId' column as a UUID, not null constraint
     userId: uuid("user_id").notNull(),
-
-    // Define the 'status' column using a custom subscriptionStatus type
     status: subscriptionStatus("status"),
-
-    // Define the 'metadata' column as JSONB
     metadata: jsonb("metadata"),
-
-    // Define the 'priceId' column as text, referencing the 'id' column of the 'prices' table
-    priceId: text("price_id").references(() => prices.id),
-
-    // Define the 'quantity' column as an integer
+    priceId: text("price_id"),
     quantity: integer("quantity"),
-
-    // Define the 'cancelAtPeriodEnd' column as a boolean
     cancelAtPeriodEnd: boolean("cancel_at_period_end"),
-
-    // Define the 'created' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    created: timestamp("created", { withTimezone: true, mode: 'string' }).default(sql`now()`).notNull(),
-
-    // Define the 'currentPeriodStart' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    currentPeriodStart: timestamp("current_period_start", { withTimezone: true, mode: 'string' }).default(sql`now()`).notNull(),
-
-    // Define the 'currentPeriodEnd' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    currentPeriodEnd: timestamp("current_period_end", { withTimezone: true, mode: 'string' }).default(sql`now()`).notNull(),
-
-    // Define the 'endedAt' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    endedAt: timestamp("ended_at", { withTimezone: true, mode: 'string' }).default(sql`now()`),
-
-    // Define the 'canceledAt' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    canceledAt: timestamp("canceled_at", { withTimezone: true, mode: 'string' }).default(sql`now()`),
-
-    // Define the 'trialStart' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    trialStart: timestamp("trial_start", { withTimezone: true, mode: 'string' }).default(sql`now()`),
-
-    // Define the 'trialEnd' column as a timestamp with timezone, storing the value as a string, with a default value of the current timestamp
-    trialEnd: timestamp("trial_end", { withTimezone: true, mode: 'string' }).default(sql`now()`),
+    created: timestamp("created", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    currentPeriodStart: timestamp("current_period_start", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    currentPeriodEnd: timestamp("current_period_end", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+    endedAt: timestamp("ended_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+    cancelAt: timestamp('cancel_at', { withTimezone: true, mode: 'string', }).defaultNow(),
+    canceledAt: timestamp("canceled_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+    trialStart: timestamp("trial_start", { withTimezone: true, mode: 'string' }).defaultNow(),
+    trialEnd: timestamp("trial_end", { withTimezone: true, mode: 'string' }).defaultNow(),
 });
