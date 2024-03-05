@@ -19,25 +19,42 @@ const LoginPage = () => {
     const router = useRouter()
     const [submitError, setSubmitError] = useState('')
 
+    /**
+     * Initializes the form with the specified configuration.
+     *
+     * @param {object} config - The configuration options for the form.
+     * @param {string} config.mode - The mode of the form. Possible values are 'onChange', 'onBlur', and 'onSubmit'.
+     * @param {object} config.resolver - The resolver object used to validate the form values.
+     * @param {object} config.defaultValues - The default values for the form fields.
+     * @returns {object} - The form object.
+     */
     const form = useForm<z.infer<typeof FormSchema>>({
         mode: 'onChange',
         resolver: zodResolver(FormSchema),
-        defaultValues: {email:'',password:''},
-        
-    })
+        defaultValues: { email: '', password: '' },
+    });
+
 
     const isLoading = form.formState.isSubmitting
 
-    const onSubmit:SubmitHandler<z.infer<typeof FormSchema>> = async (formData) => {
-        const { error } = await actionLoginUser(formData)
+    /**
+     * Handles the form submission.
+     * @param formData The form data to be submitted.
+     */
+    const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (formData) => {
+        // Call the actionLoginUser function to perform the login action.
+        const { error } = await actionLoginUser(formData);
         
+        // If there is an error, set the submit error message and reset the form.
         if (error) {
-            setSubmitError(error.message)
-            form.reset()
+            setSubmitError(error.message);
+            form.reset();
         } else {
-            router.replace('/dashboard')
+            // If there is no error, redirect the user to the dashboard.
+            router.replace('/dashboard');
         }
     }
+    
 
     return (
         <Form {...form}>
