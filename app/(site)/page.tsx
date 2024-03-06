@@ -1,3 +1,22 @@
+/**
+ * This is the HomePage component for the landing page of the application.
+ *
+ * It imports various components and assets that are used to build the landing page:
+ * - Button: A UI component for interactive buttons.
+ * - TitleSection: A component that displays the title section of the landing page.
+ * - Image: A Next.js component for optimal image handling.
+ * - Banner and Cal: Images used in the landing page.
+ * - CLIENTS, PRICING_CARDS, PRICING_PLANS, USERS: Constants used throughout the landing page.
+ * - randomUUID: A function used for generating unique identifiers.
+ * - Diamond and CheckIcon: SVG icons used in the landing page.
+ * - twMerge and clsx: Libraries for handling class names in CSS-in-JS.
+ * - CustomCard: A custom card component used in the landing page.
+ * - Avatar, AvatarFallback, AvatarImage: Components for displaying user avatars.
+ * - CardContent, CardDescription, CardTitle: Components used within card components.
+ *
+ * The HomePage function component is the main component that uses all these imported modules to build the landing page.
+ */
+
 import { Button } from '@/components/ui/button';
 import TitleSection from './../../components/landing-page/TitleSection';
 import Image from 'next/image';
@@ -196,6 +215,7 @@ export default function HomePage() {
         </div>
 
       </section>
+      
     </>
 
   )

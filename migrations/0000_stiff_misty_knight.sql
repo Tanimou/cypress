@@ -43,10 +43,10 @@ CREATE TABLE IF NOT EXISTS "workspaces" (
 	"created_at" timestamp with time zone,
 	"workspace_owner" uuid NOT NULL,
 	"title" text NOT NULL,
-	"icon_id" uuid NOT NULL,
-	"data" text NOT NULL,
+	"icon_id" text NOT NULL,
+	"data" text NULL,
 	"in_trash" text NOT NULL,
-	"logo" text NOT NULL,
+	"logo" text NULL,
 	"banner_url" text NOT NULL
 );
 --> statement-breakpoint

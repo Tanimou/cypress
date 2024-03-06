@@ -1,3 +1,32 @@
+/**
+ * The login page component.
+ * 
+ * This component represents the login page of the application. It allows users to enter their email and password to authenticate and access the dashboard.
+ * 
+ * The login page uses the following components and libraries:
+ * - `next/navigation` for routing within the Next.js application.
+ * - `react` and `react-hook-form` for managing form state and validation.
+ * - `zod` and `@hookform/resolvers/zod` for form validation using schema.
+ * - `next/image` for displaying the Cypress logo.
+ * - `@/components/ui` for reusable UI components such as form fields, buttons, and loaders.
+ * - `@/lib/server-actions/authActions` for performing the login action on the server.
+ * 
+ * The login page consists of the following main parts:
+ * - A form that allows users to enter their email and password.
+ * - Form validation using the `react-hook-form` library and the `zod` schema.
+ * - Error handling and display of submit errors.
+ * - Redirecting the user to the dashboard upon successful login.
+ * 
+ * The login page follows the following flow:
+ * 1. The user enters their email and password in the form fields.
+ * 2. The form is validated using the `zod` schema.
+ * 3. If there are validation errors, they are displayed to the user.
+ * 4. If the form is valid, the `actionLoginUser` function is called to perform the login action on the server.
+ * 5. If there is an error during login, the error message is displayed to the user and the form is reset.
+ * 6. If login is successful, the user is redirected to the dashboard.
+ * 
+ * @returns {JSX.Element} The rendered login page component.
+ */
 'use client'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'

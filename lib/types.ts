@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+
 /**
  * This is the FormSchema object which validates the form inputs.
  * It checks if the email is in the correct format and if the password is at least 8 characters long.
@@ -48,3 +49,19 @@ export const SignUpFormSchema = z
         message: "Passwords don't match.",
         path: ['confirmPassword'],
     });
+
+/**
+ * Represents the schema for creating a workspace form.
+ */
+export const CreateWorkspaceFormSchema = z.object({
+    /**
+     * The name of the workspace.
+     * @remarks Workspace name is required and must have a minimum length of 1.
+     */
+    workspaceName: z.string().describe('Workspace name').min(1, 'Workspace name is required'),
+
+    /**
+     * The logo of the workspace.
+     */
+    logo: z.any(),
+});

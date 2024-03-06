@@ -28,16 +28,16 @@ export const workspaces = pgTable('workspaces', {
     title: text('title').notNull(),
 
     // Define the 'iconId' column as a UUID, not null constraint
-    iconId: uuid('icon_id').notNull(),
+    iconId: text('icon_id').notNull(),
 
     // Define the 'data' column as text, not null constraint
-    data: text('data').notNull(),
+    data: text('data'),
 
     // Define the 'inTrash' column as text, not null constraint
     inTrash: text('in_trash').notNull(),
 
     // Define the 'logo' column as text, not null constraint
-    logo: text('logo').notNull(),
+    logo: text('logo'),
 
     // Define the 'bannerUrl' column as text, not null constraint
     bannerUrl: text('banner_url').notNull(),

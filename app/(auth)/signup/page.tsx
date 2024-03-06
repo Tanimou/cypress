@@ -1,3 +1,34 @@
+
+
+/**
+ * The Signup page component.
+ *
+ * This page allows users to sign up for an account on the Cypress platform.
+ * It provides a form where users can enter their email, password, and confirm password.
+ * Upon submission, the form data is validated using the `SignUpFormSchema` validation schema.
+ * If the validation is successful, the `actionSignUpUser` function is called to sign up the user.
+ * If there is an error during the sign up process, the error message is displayed.
+ * If the sign up is successful, a confirmation message is displayed.
+ *
+ * The page also handles code exchange errors, which are retrieved from the search parameters.
+ * The error description is extracted from the search parameters and displayed if it exists.
+ *
+ * The page uses the following components:
+ * - `Form`, `FormControl`, `FormField`, `FormDescription`, `FormMessage` from `@/components/ui/form`
+ * - `Input` from `@/components/ui/input`
+ * - `Button` from `@/components/ui/button`
+ * - `Alert`, `AlertTitle`, `AlertDescription` from `@/components/ui/alert`
+ * - `Loader` from `@/components/global/Loader`
+ * - `MailCheck` from `lucide-react`
+ *
+ * The page also uses the following libraries and hooks:
+ * - `useForm` from `react-hook-form`
+ * - `zodResolver` from `@hookform/resolvers/zod`
+ * - `useRouter`, `useSearchParams` from `next/navigation`
+ * - `z` from `zod`
+ *
+ * @returns {JSX.Element} The Signup page component.
+ */
 'use client';
 import { Button } from '@/components/ui/button';
 import {
