@@ -37,9 +37,9 @@ jobs:
         npm install
 
     - name: Commit and push changes
+      run: |
         git config --global user.email "tanimou@live.fr"
         git config --global user.name "Tanimou Cisse"
-      run: |
         git add package*.json
         git diff --staged --quiet || git commit -m "Update all packages"
         git push
