@@ -15,6 +15,20 @@
       "when": 1709393844203,
       "tag": "0001_late_zodiak",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709730409182,
+      "tag": "0002_ordinary_madame_hydra",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709735690190,
+      "tag": "0003_light_landau",
+      "breakpoints": true
     }
   ]
 }

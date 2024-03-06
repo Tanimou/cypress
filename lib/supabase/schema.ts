@@ -5,7 +5,7 @@
  * The 'files' table is similar to the 'folders' table but also includes a 'folderId' column that references the 'id' column of the 'folders' table.
  */
 
-import { prices, subscriptionStatus } from '@/migrations/schema';
+import { prices, subscriptionStatus, users } from '@/migrations/schema';
 import { sql } from "drizzle-orm"
 import { integer, boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
@@ -86,13 +86,13 @@ export const files = pgTable('files', {
     createdAt: timestamp('created_at', {
         withTimezone: true,
         mode: 'string',
-    }),
+    }).defaultNow().notNull(),
 
     // Define the 'folderId' column as a UUID, not null constraint
-    folderId: uuid('folder_id').references(() => folders.id, { onDelete: 'cascade' }),
+    folderId: uuid('folder_id').notNull().references(() => folders.id, { onDelete: 'cascade' }),
     
     // Define the 'workspaceId' column as a UUID, not null constraint
-    workspaceId: uuid('workspace_id').references(() => workspaces.id, { onDelete: 'cascade' }),
+    workspaceId: uuid('workspace_id').notNull().references(() => workspaces.id, { onDelete: 'cascade' }),
 
 
     // Define the 'title' column as text, not null constraint
@@ -102,14 +102,13 @@ export const files = pgTable('files', {
     iconId: uuid('icon_id').notNull(),
 
     // Define the 'data' column as text, not null constraint
-    data: text('data').notNull(),
+    data: text('data'),
 
     // Define the 'inTrash' column as text, not null constraint
-    inTrash: text('in_trash').notNull(),
-
+    inTrash: text('in_trash'),
 
     // Define the 'bannerUrl' column as text, not null constraint
-    bannerUrl: text('banner_url').notNull(),
+    bannerUrl: text('banner_url'),
 })
 
 export const subscriptions = pgTable("subscriptions", {
@@ -128,4 +127,14 @@ export const subscriptions = pgTable("subscriptions", {
     canceledAt: timestamp("canceled_at", { withTimezone: true, mode: 'string' }).defaultNow(),
     trialStart: timestamp("trial_start", { withTimezone: true, mode: 'string' }).defaultNow(),
     trialEnd: timestamp("trial_end", { withTimezone: true, mode: 'string' }).defaultNow(),
+});
+
+export const collaborators = pgTable('collaborators', {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    workspaceId: uuid('workspace_id').notNull().references(() => workspaces.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', {
+        withTimezone: true,
+        mode: 'string',
+    }).defaultNow().notNull(),
+    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 });

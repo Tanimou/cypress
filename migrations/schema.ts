@@ -60,6 +60,13 @@ export const prices = pgTable("prices", {
 	metadata: jsonb("metadata"),
 });
 
+export const collaborators = pgTable("collaborators", {
+	id: uuid("id").defaultRandom().primaryKey().notNull(),
+	workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id, { onDelete: "cascade" } ),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" } ),
+});
+
 export const subscriptions = pgTable("subscriptions", {
 	id: text("id").primaryKey().notNull(),
 	userId: uuid("user_id").notNull(),
@@ -80,15 +87,14 @@ export const subscriptions = pgTable("subscriptions", {
 
 export const files = pgTable("files", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
-	folderId: uuid("folder_id"),
-	workspaceId: uuid("workspace_id").references(() => workspaces.id, { onDelete: "cascade" } ),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	folderId: uuid("folder_id").notNull().references(() => folders.id, { onDelete: "cascade" } ),
+	workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id, { onDelete: "cascade" } ),
 	title: text("title").notNull(),
 	iconId: uuid("icon_id").notNull(),
-	data: text("data").notNull(),
-	inTrash: text("in_trash").notNull(),
-	logo: text("logo").notNull(),
-	bannerUrl: text("banner_url").notNull(),
+	data: text("data"),
+	inTrash: text("in_trash"),
+	bannerUrl: text("banner_url"),
 });
 
 export const folders = pgTable("folders", {
