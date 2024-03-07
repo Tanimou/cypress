@@ -1,3 +1,28 @@
+
+
+/**
+ * Renders a dropdown menu for selecting a workspace. The `WorkspaceDropdown` component
+ * is responsible for displaying the available private, shared, and collaborating workspaces,
+ * allowing the user to select a workspace, and creating new workspaces.
+ *
+ * This component is related to other components such as `SelectedWorkspace`, `CustomDialogTrigger`,
+ * and `WorkspaceCreator`. It relies on the `useAppState` hook from the `state-provider` module
+ * to manage the application state.
+ *
+ * The `WorkspaceDropdown` component follows these steps:
+ * 1. Receives the private, shared, and collaborating workspaces as props.
+ * 2. Initializes the selected option state with the default value.
+ * 3. Manages the open/closed state of the dropdown menu.
+ * 4. Uses the `useEffect` hook to set the workspaces in the application state if they are not already set.
+ * 5. Handles the selection of a workspace by updating the selected option state and closing the dropdown menu.
+ * 6. Uses another `useEffect` hook to find the selected workspace in the application state based on the default value.
+ * 7. Renders the dropdown menu with the selected workspace, private workspaces, shared workspaces,
+ *    collaborating workspaces, and the option to create a new workspace.
+ *
+ * The purpose of the `WorkspaceDropdown` component is to provide a user-friendly interface for selecting
+ * and managing workspaces in the application. It allows users to switch between different workspaces,
+ * create new workspaces, and view the details of each workspace.
+ */
 'use client';
 import { useAppState } from '@/lib/providers/state-provider';
 import { workspace } from '@/lib/supabase/supabase.types';

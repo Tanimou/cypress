@@ -9,7 +9,7 @@ import { v4 } from 'uuid';
 import { createFolder } from '@/lib/supabase/queries';
 import { useToast } from '../ui/use-toast';
 import { Accordion } from '../ui/accordion';
-// import Dropdown from './Dropdown';
+import Dropdown from './Dropdown';
 // import useSupabaseRealtime from '@/lib/hooks/useSupabaseRealtime';
 // import { useSubscriptionModal } from '@/lib/providers/subscription-modal-provider';
 
@@ -108,7 +108,7 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
                     />
                 </TooltipComponent>
             </div>
-            {/* <Accordion
+            <Accordion
                 type="multiple"
                 defaultValue={[folderId || '']}
                 className="pb-20"
@@ -124,7 +124,7 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
                             iconId={folder.iconId}
                         />
                     ))}
-            </Accordion> */}
+            </Accordion>
         </>
     );
 };

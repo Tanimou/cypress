@@ -1,3 +1,38 @@
+
+
+/**
+ * The `CollaboratorSearch` component is responsible for rendering a sheet that allows users to search for and add collaborators.
+ * 
+ * Summary:
+ * - The CollaboratorSearch page provides a user interface for searching and adding collaborators to a project.
+ * - It is related to other pages/components in the application that involve collaboration and user management.
+ * 
+ * Steps:
+ * 1. The component imports necessary dependencies and custom hooks.
+ * 2. It defines the props interface for the CollaboratorSearch component.
+ * 3. The component initializes state variables and a timer reference using the useState and useRef hooks.
+ * 4. It defines a useEffect cleanup function to clear the timer reference.
+ * 5. The component defines a getUserData function (currently empty).
+ * 6. It defines an onChangeHandler function to handle input changes and perform a search after a delay.
+ * 7. The component defines an addCollaborator function to pass the selected collaborator to the parent component.
+ * 8. The component renders a sheet with a trigger element and content.
+ * 9. Inside the sheet content, it renders a header with a title and description.
+ * 10. The component renders a search input and an input for entering collaborator email.
+ * 11. It renders a scrollable area to display search results.
+ * 12. The component filters and maps the search results to display each user's information and an "Add" button.
+ * 
+ * Purpose:
+ * - The CollaboratorSearch component allows users to search for and add collaborators to a project.
+ * - It enhances collaboration and user management within the application.
+ * - By providing a user-friendly interface, it simplifies the process of adding collaborators and improves project collaboration.
+ * - The component helps streamline project management and facilitates effective collaboration among team members.
+ * 
+ * @component CollaboratorSearch
+ * @param {User[]} existingCollaborators - An array of existing collaborators.
+ * @param {(collaborator: User) => void} getCollaborator - A callback function to receive the selected collaborator.
+ * @param {React.ReactNode} children - The trigger element for the CollaboratorSearch sheet.
+ * @returns {React.ReactElement} The CollaboratorSearch component.
+ */
 'use client';
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider';
 import { User } from '@/lib/supabase/supabase.types';
@@ -18,9 +53,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { getUsersFromSearch } from '@/lib/supabase/queries';
 
+/**
+ * Props for the CollaboratorSearch component.
+ */
 interface CollaboratorSearchProps {
+    /**
+     * An array of existing collaborators.
+     */
     existingCollaborators: User[] | [];
+    
+    /**
+     * A callback function to get the selected collaborator.
+     * @param collaborator - The selected collaborator.
+     */
     getCollaborator: (collaborator: User) => void;
+    
+    /**
+     * The children of the CollaboratorSearch component.
+     */
     children: React.ReactNode;
 }
 
@@ -29,10 +79,13 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
     existingCollaborators,
     getCollaborator,
 }) => {
+    // Using the Supabase User hook to get the current authenticated user
     const { user } = useSupabaseUser();
     const [searchResults, setSearchResults] = useState<User[] | []>([]);
     const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
+    // This useEffect hook is used to clear the timeout when the component unmounts.
+    // This is to prevent memory leaks and potential errors if the component unmounts before the timeout finishes.
     useEffect(() => {
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
@@ -41,15 +94,30 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
 
     const getUserData = () => { }
 
+    /**
+     * Handles the change event of the input element and performs a search after a delay.
+     * @param {React.ChangeEvent<HTMLInputElement>} e - The change event object.
+     */
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // Clear the previous timer if it exists
         if (timerRef) clearTimeout(timerRef.current);
+
+        // Set a new timer to perform the search after a delay
         timerRef.current = setTimeout(async () => {
+            // Perform the search using the input value by calling the getUsersFromSearch function.
+            
             const res = await getUsersFromSearch(e.target.value);
             setSearchResults(res);
         }, 450);
     };
 
+    /**
+     * Adds a collaborator.
+     * 
+     * @param user - The user to be added as a collaborator.
+     */
     const addCollaborator = (user: User) => {
+        // Explanation: This function calls the `getCollaborator` function to add the specified user as a collaborator.
         getCollaborator(user);
     };
 
