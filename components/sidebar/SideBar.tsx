@@ -12,10 +12,10 @@ import {
 import { redirect } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import WorkspaceDropdown from './WorkspaceDropdown';
-// import PlanUsage from './PlanUsage';
-// import NativeNavigation from './native-navigation';
+import PlanUsage from './PlanUsage';
+import NativeNavigation from './NativeNavigation';
 import { ScrollArea } from '../ui/scroll-area';
-// import FoldersDropdownList from './folders-dropdown-list';
+import FoldersDropdownList from './FoldersDropdownList';
 // import UserCard from './user-card';
 
 interface SidebarProps {
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
     return (
         <aside
             className={twMerge(
-                'hidden sm:flex sm:flex-col w-[280px] shrink-0 p-4 md:gap-4 !justify-between',
+                'hidden sm:flex sm:flex-col w-[280px] shrink-0 p-4 md:gap-4 !justify-between overflow-hidden scrollbar-hide',
                 className
             )}
         >
@@ -69,14 +69,15 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
                         ...sharedWorkspaces,
                     ].find((workspace) => workspace.id === params.workspaceId)}
                 />
-                {/* <PlanUsage
+                <PlanUsage
                     foldersLength={workspaceFolderData?.length || 0}
                     subscription={subscriptionData}
-                /> */}
-                {/* <NativeNavigation myWorkspaceId={params.workspaceId} /> */}
+                />
+                <NativeNavigation myWorkspaceId={params.workspaceId} />
                 <ScrollArea
                     className="overflow-scroll relative
           h-[450px]
+          scrollbar-hide
         "
                 >
                     <div
@@ -90,10 +91,10 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
           to-transparent 
           z-40"
                     />
-                    {/* <FoldersDropdownList
+                    <FoldersDropdownList
                         workspaceFolders={workspaceFolderData || []}
                         workspaceId={params.workspaceId}
-                    /> */}
+                    />
                 </ScrollArea>
             </div>
             {/* <UserCard subscription={subscriptionData} /> */}

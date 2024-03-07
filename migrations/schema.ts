@@ -99,19 +99,18 @@ export const files = pgTable("files", {
 
 export const folders = pgTable("folders", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	workspaceId: uuid("workspace_id"),
 	title: text("title").notNull(),
-	iconId: uuid("icon_id").notNull(),
-	data: text("data").notNull(),
-	inTrash: text("in_trash").notNull(),
-	logo: text("logo").notNull(),
-	bannerUrl: text("banner_url").notNull(),
+	iconId: text("icon_id").notNull(),
+	data: text("data"),
+	inTrash: text("in_trash"),
+	bannerUrl: text("banner_url"),
 });
 
 export const workspaces = pgTable("workspaces", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	workspaceOwner: uuid("workspace_owner").notNull(),
 	title: text("title").notNull(),
 	iconId: text("icon_id").notNull(),
