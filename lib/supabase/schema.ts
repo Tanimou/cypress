@@ -19,7 +19,7 @@ export const workspaces = pgTable('workspaces', {
     createdAt: timestamp('created_at', {
         withTimezone: true,
         mode: 'string',
-    }),
+    }).defaultNow().notNull(),
 
     // Define the 'workspaceOwner' column as a UUID, not null constraint
     workspaceOwner: uuid('workspace_owner').notNull(),
@@ -53,7 +53,7 @@ export const folders = pgTable('folders', {
     createdAt: timestamp('created_at', {
         withTimezone: true,
         mode: 'string',
-    }),
+    }).defaultNow().notNull(),
 
     // Define the 'workspaceId' column as a UUID, not null constraint
     workspaceId: uuid('workspace_id').references(()=>workspaces.id,{onDelete:'cascade'}),
@@ -62,17 +62,17 @@ export const folders = pgTable('folders', {
     title: text('title').notNull(),
 
     // Define the 'iconId' column as a UUID, not null constraint
-    iconId: uuid('icon_id').notNull(),
+    iconId: text('icon_id').notNull(),
 
     // Define the 'data' column as text, not null constraint
-    data: text('data').notNull(),
+    data: text('data'),
 
     // Define the 'inTrash' column as text, not null constraint
-    inTrash: text('in_trash').notNull(),
+    inTrash: text('in_trash'),
 
 
     // Define the 'bannerUrl' column as text, not null constraint
-    bannerUrl: text('banner_url').notNull(),
+    bannerUrl: text('banner_url'),
 })
 
 
