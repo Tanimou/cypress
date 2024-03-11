@@ -16,7 +16,7 @@ import PlanUsage from './PlanUsage';
 import NativeNavigation from './NativeNavigation';
 import { ScrollArea } from '../ui/scroll-area';
 import FoldersDropdownList from './FoldersDropdownList';
-// import UserCard from './user-card';
+import UserCard from './UserCard';
 
 interface SidebarProps {
     params: { workspaceId: string };
@@ -52,12 +52,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
 
     //get all the different workspaces private collaborating shared
     return (
-        <aside
-            className={twMerge(
-                'hidden sm:flex sm:flex-col w-[280px] shrink-0 p-4 md:gap-4 !justify-between overflow-hidden scrollbar-hide',
-                className
-            )}
-        >
+        <aside className={twMerge('hidden sm:flex sm:flex-col w-[280px] shrink-0 p-4 md:gap-4 !justify-between overflow-hidden scrollbar-hide',className)}>
             <div>
                 <WorkspaceDropdown
                     privateWorkspaces={privateWorkspaces}
@@ -82,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
                     />
                 </ScrollArea>
             </div>
-            {/* <UserCard subscription={subscriptionData} /> */}
+            <UserCard subscription={subscriptionData} />
         </aside>
     );
 };

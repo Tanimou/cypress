@@ -56,7 +56,7 @@ export const folders = pgTable('folders', {
     }).defaultNow().notNull(),
 
     // Define the 'workspaceId' column as a UUID, not null constraint
-    workspaceId: uuid('workspace_id').references(()=>workspaces.id,{onDelete:'cascade'}),
+    workspaceId: uuid('workspace_id').notNull().references(()=>workspaces.id,{onDelete:'cascade'}),
 
     // Define the 'title' column as text, not null constraint
     title: text('title').notNull(),
@@ -98,8 +98,8 @@ export const files = pgTable('files', {
     // Define the 'title' column as text, not null constraint
     title: text('title').notNull(),
 
-    // Define the 'iconId' column as a UUID, not null constraint
-    iconId: uuid('icon_id').notNull(),
+    // Define the 'iconId' column as a text, not null constraint
+    iconId: text('icon_id').notNull(),
 
     // Define the 'data' column as text, not null constraint
     data: text('data'),

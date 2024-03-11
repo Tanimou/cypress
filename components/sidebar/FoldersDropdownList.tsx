@@ -46,7 +46,8 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
                 },
             });
         }
-    }, [dispatch, state.workspaces, workspaceFolders, workspaceId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [workspaceFolders, workspaceId]);
     //state
 
     useEffect(() => {

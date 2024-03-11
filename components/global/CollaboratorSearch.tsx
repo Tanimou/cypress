@@ -90,7 +90,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, []);
+    }, [timerRef]);
 
     const getUserData = () => { }
 

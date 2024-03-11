@@ -91,7 +91,7 @@ export const files = pgTable("files", {
 	folderId: uuid("folder_id").notNull().references(() => folders.id, { onDelete: "cascade" } ),
 	workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id, { onDelete: "cascade" } ),
 	title: text("title").notNull(),
-	iconId: uuid("icon_id").notNull(),
+	iconId: text("icon_id").notNull(),
 	data: text("data"),
 	inTrash: text("in_trash"),
 	bannerUrl: text("banner_url"),
@@ -100,7 +100,7 @@ export const files = pgTable("files", {
 export const folders = pgTable("folders", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	workspaceId: uuid("workspace_id"),
+	workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id),
 	title: text("title").notNull(),
 	iconId: text("icon_id").notNull(),
 	data: text("data"),

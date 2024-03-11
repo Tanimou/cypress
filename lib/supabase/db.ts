@@ -36,7 +36,7 @@ const migrateDb = async () => {
         console.log(err)
     }
 }
-migrateDb()
+// migrateDb()
 
 // Export the configured database instance
 export default db

@@ -61,7 +61,8 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
                 },
             });
         }
-    }, [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces, state.workspaces.length, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [privateWorkspaces, collaboratingWorkspaces, sharedWorkspaces]);
 
     const handleSelect = (option: workspace) => {
         setSelectedOption(option);
