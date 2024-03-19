@@ -33,7 +33,7 @@ import { Badge } from '../ui/badge';
 import Image from 'next/image';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import EmojiPicker from '../global/EmojiPicker';
-// import BannerUpload from '../banner-upload/BannerUpload';
+import BannerUpload from '../banner-upload/BannerUpload';
 import { XCircleIcon } from 'lucide-react';
 // import { useSocket } from '@/lib/providers/socket-provider';
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider';
@@ -598,12 +598,12 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails, dirType, fileId, 
                         </EmojiPicker>
                     </div>
                     <div className="flex ">
-                        {/* <BannerUpload
+                        <BannerUpload                    
                             id={fileId}
                             dirType={dirType}
                             className="mt-2 text-sm text-muted-foreground p-2 hover:text-card-foreground transition-all rounded-md">
                             {details.bannerUrl ? 'Update Banner' : 'Add Banner'}
-                        </BannerUpload> */}
+                        </BannerUpload>
                         {details.bannerUrl && (
                             <Button
                                 disabled={deletingBanner}

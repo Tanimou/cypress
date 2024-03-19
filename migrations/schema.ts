@@ -117,5 +117,5 @@ export const workspaces = pgTable("workspaces", {
 	data: text("data"),
 	inTrash: text("in_trash").notNull(),
 	logo: text("logo"),
-	bannerUrl: text("banner_url").notNull(),
+	bannerUrl: text("banner_url"),
 });

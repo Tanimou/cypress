@@ -294,32 +294,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         }
     };
 
-    /**
-     * Handles the change event for the folder title input.
-     * Updates the folder title in the Redux store.
-     * 
-     * @param {Event} e - The change event object.
-     */
-    const folderTitleChange = (e: any) => {
-        // Check if workspaceId is not available
-        if (!workspaceId) return;
 
-        // Split the id to get the folder id
-        const fid = id.split('folder');
-
-        // Check if the folder id is valid
-        if (fid.length === 1) {
-            // Dispatch an action to update the folder title in the Redux store
-            dispatch({
-                type: 'UPDATE_FOLDER',
-                payload: {
-                    folder: { title: e.target.value },
-                    folderId: fid[0],
-                    workspaceId,
-                },
-            });
-        }
-    };
     
     /**
      * Handles the change event for the file title input.
@@ -471,54 +446,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         [listType]
     );
 
-    /**
-     * Adds a new file to the sidebar dropdown.
-     * This function creates a new file object, dispatches an action to add the file to the state,
-     * and makes an API call to create the file on the server.
-     * If the API call is successful, a success toast is displayed. Otherwise, an error toast is displayed.
-     */
-    const addNewFile = async () => {
-        // Check if workspaceId is available
-        if (!workspaceId) return;
-
-        // Create a new file object
-        const newFile: File = {
-            folderId: id,
-            data: null,
-            createdAt: new Date().toISOString(),
-            inTrash: null,
-            title: 'Untitled',
-            iconId: '📄',
-            id: v4(),
-            workspaceId,
-            bannerUrl: '',
-        };
-
-        // Dispatch an action to add the file to the state
-        dispatch({
-            type: 'ADD_FILE',
-            payload: { file: newFile, folderId: id, workspaceId },
-        });
-
-        // Make an API call to create the file on the server
-        const { data, error } = await createFile(newFile);
-
-        // Check if there was an error during the API call
-        if (error) {
-            // Display an error toast
-            toast({
-                title: 'Error',
-                variant: 'destructive',
-                description: 'Could not create a file',
-            });
-        } else {
-            // Display a success toast
-            toast({
-                title: 'Success',
-                description: 'File created.',
-            });
-        }
-    };
+    
 
     return (
         <AccordionItem
@@ -532,7 +460,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <AccordionTrigger
                 id={listType}
                 className="hover:no-underline p-2 dark:text-muted-foreground text-sm"
-                // disabled={listType === 'file'}
+                disabled={listType === 'file'}
             >
                 <div className={groupIdentifies}>
                     <div className="flex gap-4 items-center justify-center overflow-hidden">
@@ -546,7 +474,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                             readOnly={!isEditing}
                             onDoubleClick={handleDoubleClick}
                             onBlur={handleBlur}
-                            onChange={listType === 'folder' ? folderTitleChange : fileTitleChange}
+                            onChange={fileTitleChange}
                         />
                     </div>
                     <div className={hoverStyles}>
@@ -557,7 +485,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                                 className="hover:dark:text-white dark:text-Neutrals/neutrals-7 transition-colors"
                             />
                         </TooltipComponent>
-                        {listType === 'folder' && !isEditing && (
+                        {/* {listType === 'folder' && !isEditing && (
                             <TooltipComponent message="Add File">
                                 <PlusIcon
                                     onClick={addNewFile}
@@ -565,28 +493,11 @@ const Dropdown: React.FC<DropdownProps> = ({
                                     className="hover:dark:text-white dark:text-Neutrals/neutrals-7 transition-colors"
                                 />
                             </TooltipComponent>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </AccordionTrigger>
-            <AccordionContent>
-                {state.workspaces
-                    .find((workspace) => workspace.id === workspaceId)
-                    ?.folders.find((folder) => folder.id === id)
-                    ?.files.filter((file) => !file.inTrash)
-                    .map((file) => {
-                        const customFileId = `${id}folder${file.id}`;
-                        return (
-                            <Dropdown
-                                key={file.id}
-                                title={file.title}
-                                listType="file"
-                                id={customFileId}
-                                iconId={file.iconId}
-                            />
-                        );
-                    })}
-            </AccordionContent>
+            
         </AccordionItem>
     );
 };

@@ -76,6 +76,7 @@ export const getPrivateWorkspaces = async (userId: string) => {
         data: workspaces.data,
         inTrash: workspaces.inTrash,
         logo: workspaces.logo,
+        bannerUrl: workspaces.bannerUrl,
     }
 
     // Return the result of the query
@@ -450,8 +451,7 @@ export const deleteFolder = async (folderId: string) => {
 
 
 export const findUser = async (userId: string) => {
-    const response = await db.query.users.findFirst({
-        where: (u, { eq }) => eq(u.id, userId),
-    });
-    return response;
+    return await db.query.users.findFirst({
+            where: (u, { eq }) => eq(u.id, userId),
+        });
 };

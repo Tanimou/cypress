@@ -40,7 +40,7 @@ export const workspaces = pgTable('workspaces', {
     logo: text('logo'),
 
     // Define the 'bannerUrl' column as text, not null constraint
-    bannerUrl: text('banner_url').notNull(),
+    bannerUrl: text('banner_url')
 })
 
 // Define the 'folders' table
