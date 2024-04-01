@@ -1,5 +1,5 @@
 import { pgTable, foreignKey, pgEnum, uuid, text, jsonb, timestamp, boolean, bigint, integer } from "drizzle-orm/pg-core"
-  import { sql } from "drizzle-orm"
+  import { relations, sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -10,6 +10,8 @@ export const factorType = pgEnum("factor_type", ['totp', 'webauthn'])
 export const pricingPlanInterval = pgEnum("pricing_plan_interval", ['day', 'week', 'month', 'year'])
 export const pricingType = pgEnum("pricing_type", ['one_time', 'recurring'])
 export const subscriptionStatus = pgEnum("subscription_status", ['trialing', 'active', 'canceled', 'incomplete', 'incomplete_expired', 'past_due', 'unpaid'])
+export const equalityOp = pgEnum("equality_op", ['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'in'])
+export const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'])
 
 
 export const users = pgTable("users", {
@@ -79,7 +81,7 @@ export const subscriptions = pgTable("subscriptions", {
 	currentPeriodStart: timestamp("current_period_start", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	currentPeriodEnd: timestamp("current_period_end", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	endedAt: timestamp("ended_at", { withTimezone: true, mode: 'string' }).defaultNow(),
-	cancelAt: timestamp("cancel_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	cancelAt: timestamp("cancel_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	canceledAt: timestamp("canceled_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 	trialStart: timestamp("trial_start", { withTimezone: true, mode: 'string' }).defaultNow(),
 	trialEnd: timestamp("trial_end", { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -119,3 +121,14 @@ export const workspaces = pgTable("workspaces", {
 	logo: text("logo"),
 	bannerUrl: text("banner_url"),
 });
+
+export const productsRelations = relations(products, ({ many }) => ({
+	prices: many(prices),
+}));
+
+export const pricesRelations = relations(prices, ({ one }) => ({
+	product: one(products, {
+		fields: [prices.productId],
+		references: [products.id],
+	}),
+}));

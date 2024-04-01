@@ -1,0 +1,1 @@
+ALTER TABLE "workspaces" ALTER COLUMN "banner_url" DROP NOT NULL;

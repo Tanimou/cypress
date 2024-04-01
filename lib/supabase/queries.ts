@@ -315,6 +315,26 @@ export const getFileDetails = async (fileId: string) => {
 };
 
 
+export const getActiveProductsWithPrice = async () => {
+    try {
+        const res = await db.query.products.findMany({
+            where: (pro, { eq }) => eq(pro.active, true),
+
+            with: {
+                prices: {
+                    where: (pri, { eq }) => eq(pri.active, true),
+                },
+            },
+        });
+        if (res.length) return { data: res, error: null };
+        return { data: [], error: null };
+    } catch (error) {
+        console.log(error);
+        return { data: [], error };
+    }
+};
+
+
 /*                                                      ALL CREATE FUNCTIONS                                    */
 /**
  * Creates a new workspace.
@@ -401,7 +421,7 @@ export const updateWorkspace = async (workspace: Partial<workspace>,workspaceId:
             .update(workspaces)
             .set(workspace)
             .where(eq(workspaces.id, workspaceId));
-        revalidatePath(`/dashboard/${workspaceId}`);
+    
         return { data: null, error: null };
     } catch (error) {
         console.log(error);

@@ -7,6 +7,7 @@ import { DM_Sans } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
 import AppStateProvider from '@/lib/providers/state-provider';
 import { SupabaseUserProvider } from '@/lib/providers/supabase-user-provider';
+import { SocketProvider } from '@/lib/providers/socket-provider';
 
 
 const inter = DM_Sans({ subsets: ['latin'] })
@@ -29,10 +30,10 @@ export default function RootLayout({
 
           <AppStateProvider>
             <SupabaseUserProvider>
-              {/* <SocketProvider> */}
+              <SocketProvider>
                 {children}
                 <Toaster />
-              {/* </SocketProvider> */}
+              </SocketProvider>
             </SupabaseUserProvider>
           </AppStateProvider>
         </ThemeProvider>

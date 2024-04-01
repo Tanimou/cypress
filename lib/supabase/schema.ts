@@ -5,8 +5,8 @@
  * The 'files' table is similar to the 'folders' table but also includes a 'folderId' column that references the 'id' column of the 'folders' table.
  */
 
-import { prices, subscriptionStatus, users } from '@/migrations/schema';
-import { sql } from "drizzle-orm"
+import { prices, products, subscriptionStatus, users } from '@/migrations/schema';
+import { relations } from "drizzle-orm"
 import { integer, boolean, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 // Define the 'workspaces' table
@@ -138,3 +138,14 @@ export const collaborators = pgTable('collaborators', {
     }).defaultNow().notNull(),
     userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
 });
+
+export const productsRelations = relations(products, ({ many }) => ({
+    prices: many(prices),
+}));
+
+export const pricesRelations = relations(prices, ({ one }) => ({
+    product: one(products, {
+        fields: [prices.productId],
+        references: [products.id],
+    }),
+}));

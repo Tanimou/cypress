@@ -35,7 +35,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import EmojiPicker from '../global/EmojiPicker';
 import BannerUpload from '../banner-upload/BannerUpload';
 import { XCircleIcon } from 'lucide-react';
-// import { useSocket } from '@/lib/providers/socket-provider';
+import { useSocket } from '@/lib/providers/socket-provider';
 import { useSupabaseUser } from '@/lib/providers/supabase-user-provider';
 
 interface QuillEditorProps {
@@ -65,13 +65,13 @@ const TOOLBAR_OPTIONS = [
 ];
 
 const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails, dirType, fileId, }) => {
-    
+
     const supabase = createClientComponentClient();
     const { state, workspaceId, folderId, dispatch } = useAppState();
     const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
     const { user } = useSupabaseUser();
     const router = useRouter();
-    // const { socket, isConnected } = useSocket();
+    const { socket, isConnected } = useSocket();
     const pathname = usePathname();
     const [quill, setQuill] = useState<any>(null);
     const [collaborators, setCollaborators] = useState<
@@ -112,7 +112,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails, dirType, fileId, 
             inTrash: dirDetails.inTrash,
             bannerUrl: dirDetails.bannerUrl,
         } as workspace | Folder | File;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state, workspaceId, folderId]);
 
 
@@ -350,164 +350,165 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails, dirType, fileId, 
             }
         };
         fetchInformation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fileId, workspaceId, quill, dirType]);
 
-    // useEffect(() => {
-    //     if (quill === null || socket === null || !fileId || !localCursors.length)
-    //         return;
-    //     const socketHandler = (range: any, roomId: string, cursorId: string) => {
-    //         if (roomId === fileId) {
-    //             const cursorToMove = localCursors.find(
-    //                 (c: any) => c.cursors()?.[0].id === cursorId
-    //             );
-    //             if (cursorToMove) {
-    //                 cursorToMove.moveCursor(cursorId, range);
-    //             }
-    //         }
-    //     };
-    //     socket.on('receive-cursor-move', socketHandler);
-    //     return () => {
-    //         socket.off('receive-cursor-move', socketHandler);
-    //     };
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [quill, socket, fileId, localCursors]);
+    //listen to changes
+    useEffect(() => {
+        if (quill === null || socket === null || !fileId || !localCursors.length)
+            return;
+        const socketHandler = (range: any, roomId: string, cursorId: string) => {
+            if (roomId === fileId) {
+                const cursorToMove = localCursors.find(
+                    (c: any) => c.cursors()?.[0].id === cursorId
+                );
+                if (cursorToMove) {
+                    cursorToMove.moveCursor(cursorId, range);
+                }
+            }
+        };
+        socket.on('receive-cursor-move', socketHandler);
+        return () => {
+            socket.off('receive-cursor-move', socketHandler);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quill, socket, fileId, localCursors]);
 
     //rooms
-    // useEffect(() => {
-    //     if (socket === null || quill === null || !fileId) return;
-    //     socket.emit('create-room', fileId);
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [socket, quill, fileId]);
+    useEffect(() => {
+        if (socket === null || quill === null || !fileId) return;
+        socket.emit('create-room', fileId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [socket, quill, fileId]);
 
     //Send quill changes to all clients
-    // useEffect(() => {
-    //     if (quill === null || socket === null || !fileId || !user) return;
+    useEffect(() => {
+        if (quill === null || socket === null || !fileId || !user) return;
 
-    //     const selectionChangeHandler = (cursorId: string) => {
-    //         return (range: any, oldRange: any, source: any) => {
-    //             if (source === 'user' && cursorId) {
-    //                 socket.emit('send-cursor-move', range, fileId, cursorId);
-    //             }
-    //         };
-    //     };
-    //     const quillHandler = (delta: any, oldDelta: any, source: any) => {
-    //         if (source !== 'user') return;
-    //         if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    //         setSaving(true);
-    //         const contents = quill.getContents();
-    //         const quillLength = quill.getLength();
-    //         saveTimerRef.current = setTimeout(async () => {
-    //             // if (contents && quillLength !== 1 && fileId) {
-    //             //   if (dirType == 'workspace') {
-    //             //     dispatch({
-    //             //       type: 'UPDATE_WORKSPACE',
-    //             //       payload: {
-    //             //         workspace: { data: JSON.stringify(contents) },
-    //             //         workspaceId: fileId,
-    //             //       },
-    //             //     });
-    //             //     await updateWorkspace({ data: JSON.stringify(contents) }, fileId);
-    //             //   }
-    //             //   if (dirType == 'folder') {
-    //             //     if (!workspaceId) return;
-    //             //     dispatch({
-    //             //       type: 'UPDATE_FOLDER',
-    //             //       payload: {
-    //             //         folder: { data: JSON.stringify(contents) },
-    //             //         workspaceId,
-    //             //         folderId: fileId,
-    //             //       },
-    //             //     });
-    //             //     await updateFolder({ data: JSON.stringify(contents) }, fileId);
-    //             //   }
-    //             //   if (dirType == 'file') {
-    //             //     if (!workspaceId || !folderId) return;
-    //             //     dispatch({
-    //             //       type: 'UPDATE_FILE',
-    //             //       payload: {
-    //             //         file: { data: JSON.stringify(contents) },
-    //             //         workspaceId,
-    //             //         folderId: folderId,
-    //             //         fileId,
-    //             //       },
-    //             //     });
-    //             //     await updateFile({ data: JSON.stringify(contents) }, fileId);
-    //             //   }
-    //             // }
-    //             setSaving(false);
-    //         }, 850);
-    //         socket.emit('send-changes', delta, fileId);
-    //     };
-    //     quill.on('text-change', quillHandler);
-    //     quill.on('selection-change', selectionChangeHandler(user.id));
+        const selectionChangeHandler = (cursorId: string) => {
+            return (range: any, oldRange: any, source: any) => {
+                if (source === 'user' && cursorId) {
+                    socket.emit('send-cursor-move', range, fileId, cursorId);
+                }
+            };
+        };
+        const quillHandler = (delta: any, oldDelta: any, source: any) => {
+            if (source !== 'user') return;
+            if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+            setSaving(true);
+            const contents = quill.getContents();
+            const quillLength = quill.getLength();
+            saveTimerRef.current = setTimeout(async () => {
+                if (contents && quillLength !== 1 && fileId) {
+                    if (dirType == 'workspace') {
+                        dispatch({
+                            type: 'UPDATE_WORKSPACE',
+                            payload: {
+                                workspace: { data: JSON.stringify(contents) },
+                                workspaceId: fileId,
+                            },
+                        });
+                        await updateWorkspace({ data: JSON.stringify(contents) }, fileId);
+                    }
+                    if (dirType == 'folder') {
+                        if (!workspaceId) return;
+                        dispatch({
+                            type: 'UPDATE_FOLDER',
+                            payload: {
+                                folder: { data: JSON.stringify(contents) },
+                                workspaceId,
+                                folderId: fileId,
+                            },
+                        });
+                        await updateFolder({ data: JSON.stringify(contents) }, fileId);
+                    }
+                    if (dirType == 'file') {
+                        if (!workspaceId || !folderId) return;
+                        dispatch({
+                            type: 'UPDATE_FILE',
+                            payload: {
+                                file: { data: JSON.stringify(contents) },
+                                workspaceId,
+                                folderId: folderId,
+                                fileId,
+                            },
+                        });
+                        await updateFile({ data: JSON.stringify(contents) }, fileId);
+                    }
+                }
+                setSaving(false);
+            }, 850);
+            socket.emit('send-changes', delta, fileId);
+        };
+        quill.on('text-change', quillHandler);
+        quill.on('selection-change', selectionChangeHandler(user.id));
 
-    //     return () => {
-    //         quill.off('text-change', quillHandler);
-    //         quill.off('selection-change', selectionChangeHandler);
-    //         if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    //     };
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [quill, socket, fileId, user, details, folderId, workspaceId, dispatch]);
+        return () => {
+            quill.off('text-change', quillHandler);
+            quill.off('selection-change', selectionChangeHandler);
+            if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quill, socket, fileId, user, details, folderId, workspaceId, dispatch]);
 
-    // useEffect(() => {
-    //     if (quill === null || socket === null) return;
-    //     const socketHandler = (deltas: any, id: string) => {
-    //         if (id === fileId) {
-    //             quill.updateContents(deltas);
-    //         }
-    //     };
-    //     socket.on('receive-changes', socketHandler);
-    //     return () => {
-    //         socket.off('receive-changes', socketHandler);
-    //     };
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [quill, socket, fileId]);
+    useEffect(() => {
+        if (quill === null || socket === null) return;
+        const socketHandler = (deltas: any, id: string) => {
+            if (id === fileId) {
+                quill.updateContents(deltas);
+            }
+        };
+        socket.on('receive-changes', socketHandler);
+        return () => {
+            socket.off('receive-changes', socketHandler);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quill, socket, fileId]);
 
-    // useEffect(() => {
-    //     if (!fileId || quill === null) return;
-    //     const room = supabase.channel(fileId);
-    //     const subscription = room
-    //         .on('presence', { event: 'sync' }, () => {
-    //             const newState = room.presenceState();
-    //             const newCollaborators = Object.values(newState).flat() as any;
-    //             setCollaborators(newCollaborators);
-    //             if (user) {
-    //                 const allCursors: any = [];
-    //                 newCollaborators.forEach(
-    //                     (collaborator: { id: string; email: string; avatar: string }) => {
-    //                         if (collaborator.id !== user.id) {
-    //                             const userCursor = quill.getModule('cursors');
-    //                             userCursor.createCursor(
-    //                                 collaborator.id,
-    //                                 collaborator.email.split('@')[0],
-    //                                 `#${Math.random().toString(16).slice(2, 8)}`
-    //                             );
-    //                             allCursors.push(userCursor);
-    //                         }
-    //                     }
-    //                 );
-    //                 setLocalCursors(allCursors);
-    //             }
-    //         })
-    //         .subscribe(async (status) => {
-    //             if (status !== 'SUBSCRIBED' || !user) return;
-    //             const response = await findUser(user.id);
-    //             if (!response) return;
+    useEffect(() => {
+        if (!fileId || quill === null) return;
+        const room = supabase.channel(fileId);
+        const subscription = room
+            .on('presence', { event: 'sync' }, () => {
+                const newState = room.presenceState();
+                const newCollaborators = Object.values(newState).flat() as any;
+                setCollaborators(newCollaborators);
+                if (user) {
+                    const allCursors: any = [];
+                    newCollaborators.forEach(
+                        (collaborator: { id: string; email: string; avatar: string }) => {
+                            if (collaborator.id !== user.id) {
+                                const userCursor = quill.getModule('cursors');
+                                userCursor.createCursor(
+                                    collaborator.id,
+                                    collaborator.email.split('@')[0],
+                                    `#${Math.random().toString(16).slice(2, 8)}`
+                                );
+                                allCursors.push(userCursor);
+                            }
+                        }
+                    );
+                    setLocalCursors(allCursors);
+                }
+            })
+            .subscribe(async (status) => {
+                if (status !== 'SUBSCRIBED' || !user) return;
+                const response = await findUser(user.id);
+                if (!response) return;
 
-    //             room.track({
-    //                 id: user.id,
-    //                 email: user.email?.split('@')[0],
-    //                 avatarUrl: response.avatarUrl
-    //                     ? supabase.storage.from('avatars').getPublicUrl(response.avatarUrl)
-    //                         .data.publicUrl
-    //                     : '',
-    //             });
-    //         });
-    //     return () => {
-    //         supabase.removeChannel(room);
-    //     };
-    // }, [fileId, quill, supabase, user]);
+                room.track({
+                    id: user.id,
+                    email: user.email?.split('@')[0],
+                    avatarUrl: response.avatarUrl
+                        ? supabase.storage.from('avatars').getPublicUrl(response.avatarUrl)
+                            .data.publicUrl
+                        : '',
+                });
+            });
+        return () => {
+            supabase.removeChannel(room);
+        };
+    }, [fileId, quill, supabase, user]);
 
     return (
         <>
@@ -598,7 +599,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ dirDetails, dirType, fileId, 
                         </EmojiPicker>
                     </div>
                     <div className="flex ">
-                        <BannerUpload                    
+                        <BannerUpload
                             id={fileId}
                             dirType={dirType}
                             className="mt-2 text-sm text-muted-foreground p-2 hover:text-card-foreground transition-all rounded-md">
