@@ -81,7 +81,7 @@ export const subscriptions = pgTable("subscriptions", {
 	currentPeriodStart: timestamp("current_period_start", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	currentPeriodEnd: timestamp("current_period_end", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	endedAt: timestamp("ended_at", { withTimezone: true, mode: 'string' }).defaultNow(),
-	cancelAt: timestamp("cancel_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	cancelAt: timestamp("cancel_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 	canceledAt: timestamp("canceled_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 	trialStart: timestamp("trial_start", { withTimezone: true, mode: 'string' }).defaultNow(),
 	trialEnd: timestamp("trial_end", { withTimezone: true, mode: 'string' }).defaultNow(),
